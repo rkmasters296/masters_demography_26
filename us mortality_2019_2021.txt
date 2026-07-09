@@ -1,0 +1,519 @@
+
+***** Load 2019 & 2020 & 2021 Restricted-Access NCHS Mortality Files *****
+***** Collapse into 0, 1-4, 5-9, ..., 95-99, 100+ Age Groups by sex  *****
+***** Merge with Population Counts: Census Vintage 2022, 1990-2021 *****
+
+
+****************
+* Loading Data *
+****************
+
+cd "E:\...\MortAC2019"
+
+
+*************
+*    2019   *
+*     Sex   *
+*************
+
+infix str state 33-34 ra 445-446 mra 489-490 hisp 488 str sex 69 age 75-76 str cod_icd10 146-149 cod113 154-156 countcond 341-342 str cond1 344-348 str cond2 349-353 str cond3 354-358 str cond4 359-363 str cond5 364-368 using "MULT2019US.AllCnty.txt", clear
+
+compress
+
+des
+
+* gen mort
+
+gen mort = 1
+
+* drop foreign residents
+
+drop if state == "YY"
+drop if state == "ZZ"
+drop if state == "VI"
+drop if state == "PR"
+drop if state == "MX"
+drop if state == "GU"
+drop if state == "CU"
+drop if state == "AS"
+drop if state == "CC"
+
+gen female = 0
+replace female = 1 if sex == "F"
+
+gen agecat = .
+replace agecat = 0  if age >= 1 & age <= 22
+replace agecat = 1  if age >= 23 & age <= 26
+replace agecat = 5  if age == 27
+replace agecat = 10 if age == 28
+replace agecat = 15 if age == 29
+replace agecat = 20 if age == 30
+replace agecat = 25 if age == 31
+replace agecat = 30 if age == 32
+replace agecat = 35 if age == 33
+replace agecat = 40 if age == 34
+replace agecat = 45 if age == 35
+replace agecat = 50 if age == 36
+replace agecat = 55 if age == 37
+replace agecat = 60 if age == 38
+replace agecat = 65 if age == 39
+replace agecat = 70 if age == 40
+replace agecat = 75 if age == 41
+replace agecat = 80 if age == 42
+replace agecat = 85 if age == 43 
+replace agecat = 90 if age == 44
+replace agecat = 95 if age == 45
+replace agecat = 100 if age >= 46 & age <=51
+
+
+* Collapse Death Counts - by Sex, Age Category
+
+sort female agecat
+
+collapse (sum) death=mort, by(female agecat)
+
+rename agecat age
+drop if age == .
+
+* Save 2019 Death Counts - By Sex, Age
+
+
+sort year female age
+
+save "E:\Data\covid\data_nation\covid_death_sex_2019.dta", replace
+
+
+*********
+*  2019 *
+* Total *
+*********
+
+infix str state 33-34 ra 445-446 mra 489-490 hisp 488 str sex 69 age 75-76 str cod_icd10 146-149 cod113 154-156 countcond 341-342 str cond1 344-348 str cond2 349-353 str cond3 354-358 str cond4 359-363 str cond5 364-368 using "MULT2019US.AllCnty.txt", clear
+
+compress
+
+des
+
+* gen mort
+
+gen mort = 1
+
+* drop foreign residents
+
+drop if state == "YY"
+drop if state == "ZZ"
+drop if state == "VI"
+drop if state == "PR"
+drop if state == "MX"
+drop if state == "GU"
+drop if state == "CU"
+drop if state == "AS"
+drop if state == "CC"
+
+gen female = 0
+replace female = 1 if sex == "F"
+
+
+gen agecat = .
+replace agecat = 0  if age >= 1 & age <= 22
+replace agecat = 1  if age >= 23 & age <= 26
+replace agecat = 5  if age == 27
+replace agecat = 10 if age == 28
+replace agecat = 15 if age == 29
+replace agecat = 20 if age == 30
+replace agecat = 25 if age == 31
+replace agecat = 30 if age == 32
+replace agecat = 35 if age == 33
+replace agecat = 40 if age == 34
+replace agecat = 45 if age == 35
+replace agecat = 50 if age == 36
+replace agecat = 55 if age == 37
+replace agecat = 60 if age == 38
+replace agecat = 65 if age == 39
+replace agecat = 70 if age == 40
+replace agecat = 75 if age == 41
+replace agecat = 80 if age == 42
+replace agecat = 85 if age == 43 
+replace agecat = 90 if age == 44
+replace agecat = 95 if age == 45
+replace agecat = 100 if age >= 46 & age <=51
+
+
+* Collapse Death Counts - by Age Category
+
+sort agecat
+
+collapse (sum) death=mort, by(agecat)
+
+rename agecat age
+drop if age == .
+
+* Save 2019 Death Counts - By Age
+
+gen year = 2019
+
+sort year age
+
+save "E:\Data\covid\data_nation\covid_death_2019.dta", replace
+
+
+cd "E:\...\MULT2020.LimGeo"
+
+
+********
+* 2020 *
+*  Sex *
+********
+
+infix str state 33-34 ra 445-446 mra 489-490 hisp 488 str sex 69 age 75-76 str cod_icd10 146-149 cod113 154-156 countcond 341-342 str cond1 344-348 str cond2 349-353 str cond3 354-358 str cond4 359-363 str cond5 364-368 str cond6 369-373 str cond7 374-378 str cond8 379-383 str cond9 384-388 str cond10 389-393 str cond11 394-398 str cond12 399-403 str cond13 404-408 str cond14 409-413 str cond15 414-418 str cond16 419-423 str cond17 424-428 str cond18 429-433 str cond19 434-438 str cond20 439-443 using "Mort2020US.LimGeo.txt", clear
+
+compress
+
+des
+
+* gen mort
+
+gen mort = 1
+
+* drop foreign residents
+
+drop if state == "YY"
+drop if state == "ZZ"
+drop if state == "VI"
+drop if state == "PR"
+drop if state == "MX"
+drop if state == "GU"
+drop if state == "CU"
+drop if state == "AS"
+drop if state == "CC"
+
+gen female = 0
+replace female = 1 if sex == "F"
+
+gen agecat = .
+replace agecat = 0  if age >= 1 & age <= 22
+replace agecat = 1  if age >= 23 & age <= 26
+replace agecat = 5  if age == 27
+replace agecat = 10 if age == 28
+replace agecat = 15 if age == 29
+replace agecat = 20 if age == 30
+replace agecat = 25 if age == 31
+replace agecat = 30 if age == 32
+replace agecat = 35 if age == 33
+replace agecat = 40 if age == 34
+replace agecat = 45 if age == 35
+replace agecat = 50 if age == 36
+replace agecat = 55 if age == 37
+replace agecat = 60 if age == 38
+replace agecat = 65 if age == 39
+replace agecat = 70 if age == 40
+replace agecat = 75 if age == 41
+replace agecat = 80 if age == 42
+replace agecat = 85 if age == 43 
+replace agecat = 90 if age == 44
+replace agecat = 95 if age == 45
+replace agecat = 100 if age >= 46 & age <=51
+
+
+* Collapse Death Counts - by Sex, Age Category
+
+sort sex agecat
+
+collapse (sum) death=mort, by(female agecat)
+
+rename agecat age
+drop if age == .
+
+* Save 2020 Death Counts - By Sex, Age
+
+gen year = 2020
+
+sort year female age
+
+save "E:\Data\covid\data_nation\covid_death_sex_2020.dta", replace
+
+
+*********
+* 2020  *
+* Total *
+*********
+
+infix str state 33-34 ra 445-446 mra 489-490 hisp 488 str sex 69 age 75-76 str cod_icd10 146-149 cod113 154-156 countcond 341-342 str cond1 344-348 str cond2 349-353 str cond3 354-358 str cond4 359-363 str cond5 364-368 str cond6 369-373 str cond7 374-378 str cond8 379-383 str cond9 384-388 str cond10 389-393 str cond11 394-398 str cond12 399-403 str cond13 404-408 str cond14 409-413 str cond15 414-418 str cond16 419-423 str cond17 424-428 str cond18 429-433 str cond19 434-438 str cond20 439-443 using "Mort2020US.LimGeo.txt", clear
+
+compress
+
+des
+
+
+* gen mort
+
+gen mort = 1
+
+
+* drop foreign residents
+
+drop if state == "YY"
+drop if state == "ZZ"
+drop if state == "VI"
+drop if state == "PR"
+drop if state == "MX"
+drop if state == "GU"
+drop if state == "CU"
+drop if state == "AS"
+drop if state == "CC"
+
+gen agecat = .
+replace agecat = 0  if age >= 1 & age <= 22
+replace agecat = 1  if age >= 23 & age <= 26
+replace agecat = 5  if age == 27
+replace agecat = 10 if age == 28
+replace agecat = 15 if age == 29
+replace agecat = 20 if age == 30
+replace agecat = 25 if age == 31
+replace agecat = 30 if age == 32
+replace agecat = 35 if age == 33
+replace agecat = 40 if age == 34
+replace agecat = 45 if age == 35
+replace agecat = 50 if age == 36
+replace agecat = 55 if age == 37
+replace agecat = 60 if age == 38
+replace agecat = 65 if age == 39
+replace agecat = 70 if age == 40
+replace agecat = 75 if age == 41
+replace agecat = 80 if age == 42
+replace agecat = 85 if age == 43 
+replace agecat = 90 if age == 44
+replace agecat = 95 if age == 45
+replace agecat = 100 if age >= 46 & age <=51
+
+
+* Collapse Death Counts - by Age Category
+
+sort agecat
+
+collapse (sum) death=mort, by(agecat)
+
+rename agecat age
+drop if age == .
+
+* Save 2020 Death Counts - By Sex, Age
+
+gen year = 2020
+
+sort year age
+
+save "E:\Data\covid\data_nation\covid_death_2020.dta", replace
+
+
+
+
+
+cd "E:\...MULT2021.LimGeo"
+
+
+********
+* 2021 *
+*  Sex *
+********
+
+infix str state 33-34 ra 450 mra 489-490 hisp 484-486 str sex 69 age 75-76 str cod_icd10 146-149 cod113 154-156 countcond 341-342 str cond1 344-348 str cond2 349-353 str cond3 354-358 str cond4 359-363 str cond5 364-368 str cond6 369-373 str cond7 374-378 str cond8 379-383 str cond9 384-388 str cond10 389-393 str cond11 394-398 str cond12 399-403 str cond13 404-408 str cond14 409-413 str cond15 414-418 str cond16 419-423 str cond17 424-428 str cond18 429-433 str cond19 434-438 str cond20 439-443 using "Mort2021US.LimGeo.txt", clear
+
+compress
+
+des
+
+
+* gen mort
+
+gen mort = 1
+
+
+* drop foreign residents
+
+drop if state == "YY"
+drop if state == "ZZ"
+drop if state == "VI"
+drop if state == "PR"
+drop if state == "MX"
+drop if state == "GU"
+drop if state == "CU"
+drop if state == "AS"
+drop if state == "CC"
+
+gen female = 0
+replace female = 1 if sex == "F"
+
+gen agecat = .
+replace agecat = 0  if age >= 1 & age <= 22
+replace agecat = 1  if age >= 23 & age <= 26
+replace agecat = 5  if age == 27
+replace agecat = 10 if age == 28
+replace agecat = 15 if age == 29
+replace agecat = 20 if age == 30
+replace agecat = 25 if age == 31
+replace agecat = 30 if age == 32
+replace agecat = 35 if age == 33
+replace agecat = 40 if age == 34
+replace agecat = 45 if age == 35
+replace agecat = 50 if age == 36
+replace agecat = 55 if age == 37
+replace agecat = 60 if age == 38
+replace agecat = 65 if age == 39
+replace agecat = 70 if age == 40
+replace agecat = 75 if age == 41
+replace agecat = 80 if age == 42
+replace agecat = 85 if age == 43 
+replace agecat = 90 if age == 44
+replace agecat = 95 if age == 45
+replace agecat = 100 if age >= 46 & age <=51
+
+
+* Collapse Death Counts - by Sex, Age Category
+
+sort female agecat
+
+
+collapse (sum) death=mort, by(female agecat)
+
+rename agecat age
+drop if age == .
+
+* Save 2021 Death Counts - By Sex, Age
+
+gen year = 2021
+
+sort year female age
+
+save "E:\Data\covid\data_nation\covid_death_sex_2021.dta", replace
+
+
+
+
+*********
+* 2021  *
+* Total *
+*********
+
+infix str state 33-34 ra 450 mra 489-490 hisp 484-486 str sex 69 age 75-76 str cod_icd10 146-149 cod113 154-156 countcond 341-342 str cond1 344-348 str cond2 349-353 str cond3 354-358 str cond4 359-363 str cond5 364-368 str cond6 369-373 str cond7 374-378 str cond8 379-383 str cond9 384-388 str cond10 389-393 str cond11 394-398 str cond12 399-403 str cond13 404-408 str cond14 409-413 str cond15 414-418 str cond16 419-423 str cond17 424-428 str cond18 429-433 str cond19 434-438 str cond20 439-443 using "Mort2021US.LimGeo.txt", clear
+
+compress
+
+des
+
+
+* gen mort
+
+gen mort = 1
+
+
+* drop foreign residents
+
+drop if state == "YY"
+drop if state == "ZZ"
+drop if state == "VI"
+drop if state == "PR"
+drop if state == "MX"
+drop if state == "GU"
+drop if state == "CU"
+drop if state == "AS"
+drop if state == "CC"
+
+gen agecat = .
+replace agecat = 0  if age >= 1 & age <= 22
+replace agecat = 1  if age >= 23 & age <= 26
+replace agecat = 5  if age == 27
+replace agecat = 10 if age == 28
+replace agecat = 15 if age == 29
+replace agecat = 20 if age == 30
+replace agecat = 25 if age == 31
+replace agecat = 30 if age == 32
+replace agecat = 35 if age == 33
+replace agecat = 40 if age == 34
+replace agecat = 45 if age == 35
+replace agecat = 50 if age == 36
+replace agecat = 55 if age == 37
+replace agecat = 60 if age == 38
+replace agecat = 65 if age == 39
+replace agecat = 70 if age == 40
+replace agecat = 75 if age == 41
+replace agecat = 80 if age == 42
+replace agecat = 85 if age == 43 
+replace agecat = 90 if age == 44
+replace agecat = 95 if age == 45
+replace agecat = 100 if age >= 46 & age <=51
+
+
+* Collapse Death Counts - by Age Category
+
+sort agecat
+
+collapse (sum) death=mort, by(agecat)
+
+rename agecat age
+drop if age == .
+
+* Save 2021 Death Counts - By Age
+
+gen year = 2021
+
+sort year age
+
+save "E:\Data\covid\data_nation\covid_death_2021.dta", replace
+
+
+
+
+
+
+**************************************
+*     Append 2021, 2020, & 2019  *
+* Merge Death Counts with Pop Counts *
+**************************************
+
+* TOTAL
+
+use "E:\Data\covid\data_nation\covid_death_2019.dta", replace
+append using "E:\Data\covid\data_nation\covid_death_2020.dta"
+append using "E:\Data\covid\data_nation\covid_death_2021.dta"
+
+sort year age
+save "E:\Data\covid\data_nation\total_covid_death_1921.dta", replace
+
+* SEX
+
+use "E:\Data\covid\data_nation\covid_death_sex_2019.dta", replace
+append using "E:\Data\covid\data_nation\covid_death_sex_2020.dta"
+append using "E:\Data\covid\data_nation\covid_death_sex_2021.dta"
+
+sort year female age
+save "E:\Data\covid\data_nation\sex_covid_death_1921.dta", replace
+
+
+
+
+*********************
+* Merge Death + Pop *
+*********************
+
+*** Sex ***
+
+use "E:\Data\covid\data_nation\pop\Vintage 2022\sex pop_2019_2021.dta", replace
+sort year female age
+
+merge year female age using "E:\Data\covid\data_nation\sex_covid_death_1922.dta"
+
+
+save "E:\Data\covid\data_nation\sex_covid_mx_1921.dta", replace
+
+
+*** Total ***
+
+use "E:\Data\covid\data_nation\pop\Vintage 2022\tot 2019_2021 pop.dta", replace
+sort year age
+
+merge year age using "E:\Data\covid\data_nation\total_covid_death_1921.dta"
+
+
+save "E:\Data\covid\data_nation\total_covid_mx_1921.dta", replace
+
+

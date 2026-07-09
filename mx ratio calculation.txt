@@ -1,0 +1,44 @@
+************************************
+***      TOTAL Population        ***
+*** 	  202x:2019: RR 	 ***
+************************************
+
+
+use "E:\Data\covid\data_nation\total_covid_mx_1921.dta", clear
+
+drop _merge
+
+sort year age
+
+gen mx_19ref = mx if year == 2019
+
+bysort age (mx_19ref): replace mx_19ref = mx_19ref[1]
+
+bysort year age: gen rr2019 = mx/mx_19ref if year == 2020
+bysort year age: gen rr2119 = mx/mx_19ref if year == 2021
+
+sort year age
+
+
+
+************************************
+***     Population by Sex        ***
+*** 	  202x:2019: RR 	 ***
+************************************
+
+* Female *
+
+use "E:\Data\covid\data_nation\female_race_covid_mx_1921.dta", clear
+
+drop _merge
+
+sort year female age
+
+gen mx_19ref = mx if year == 2019
+
+bysort age (mx_19ref): replace mx_19ref = mx_19ref[1]
+
+bysort year age: gen rr2019 = mx/mx_19ref if year == 2020
+bysort year age: gen rr2119 = mx/mx_19ref if year == 2021
+
+sort year race age
